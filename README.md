@@ -32,6 +32,32 @@
 $ npm install
 ```
 
+## Setup
+
+### Install 3rd parties
+
+1. Mysql server
+- Install MySQL
+- Create new database for this project
+2. 
+
+### Configuration
+1. Updating ```env```
+- ```.env.development``` : for development mode
+- ```.env.production``` : for production mode
+- ```.env.testing``` : for testing mode
+
+2. Migration database
+- ```npm run migration:gen src/database/migrations/{ChangingCommit}```:  
+To generate new migration TS file, one file ```timestamp-ChangingCommit.ts``` will be saved in ```src/database/migrations``` folder.  
+Example: ```npm run migration:gen src/database/migrations/Initial```  
+
+- ```npm run migration:run```:  
+To apply all changes in ```src/database/migrations``` folder to database.  
+
+- ```npm run migration:revert```:  
+If for some reason you want to revert the changes
+
 ## Running the app
 
 ```bash
