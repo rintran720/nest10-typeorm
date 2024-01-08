@@ -23,9 +23,18 @@ export class BookService {
     return this.bookRepository.findOne({ where: { id } });
   }
 
-  async update(id: string, book: UpdateBookDto): Promise<Book> {
-    await this.bookRepository.update(id, book);
-    return this.bookRepository.findOne({ where: { id } });
+  async update(id: string, updateBookDto: UpdateBookDto): Promise<Book> {
+    const book = await this.bookRepository.findOne({ where: { id } });
+
+    if (!book) {
+      throw new Error('Book not found');
+    }
+
+    book.title = updateBookDto.title;
+    book.author = updateBookDto.author;
+    book.updated_at = new Date();
+
+    return this.bookRepository.save(book);
   }
 
   async remove(id: string): Promise<void> {
