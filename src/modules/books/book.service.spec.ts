@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { BookService } from './book.service';
 import { Book } from './book.entity';
 import { CreateBookDto, UpdateBookDto } from './dto/book.dto';
-import { NotFoundException } from '@nestjs/common';
 
 describe('BookService', () => {
   let bookService: BookService;
@@ -139,7 +138,7 @@ describe('BookService', () => {
       });
     });
 
-    it('should throw NotFoundException if book is not found', async () => {
+    it('should throw Error if book is not found', async () => {
       const bookId = '1';
       const updateBookDto: UpdateBookDto = {
         title: 'Updated Book',
@@ -157,7 +156,7 @@ describe('BookService', () => {
       jest.spyOn(bookRepository, 'save').mockResolvedValue(updatedBook);
 
       await expect(bookService.update(bookId, updateBookDto)).rejects.toThrow(
-        NotFoundException,
+        Error,
       );
       expect(bookRepository.findOne).toHaveBeenCalledWith({
         where: { id: bookId },

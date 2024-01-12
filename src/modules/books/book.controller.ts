@@ -6,12 +6,15 @@ import {
   Delete,
   Body,
   Param,
+  Logger,
+  BadRequestException,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto, UpdateBookDto } from './dto/book.dto';
 
 @Controller('books')
 export class BookController {
+  private readonly logger = new Logger(BookController.name);
   constructor(private readonly bookService: BookService) {}
 
   @Get()
@@ -30,8 +33,14 @@ export class BookController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.bookService.update(id, updateBookDto);
+  async update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
+    try {
+      const updated = await this.bookService.update(id, updateBookDto);
+      return updated;
+    } catch (error) {
+      this.logger.error(error);
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Delete(':id')
